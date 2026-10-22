@@ -1,0 +1,27 @@
+{
+  "name": "backend_lab4",
+  "version": "1.0.0",
+  "description": "Простий HTTP-сервер на Node.js",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js -i titanic.json -h 127.0.0.1 -p 3000",
+    "dev": "node --watch main.js -i titanic.json -h 127.0.0.1 -p 3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikdem37/backend_lab4.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vikdem37/backend_lab4/issues"
+  },
+  "homepage": "https://github.com/vikdem37/backend_lab4#readme",
+  "dependencies": {
+    "commander": "^15.0.0"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}
