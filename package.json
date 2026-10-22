@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Простий HTTP-сервер на Node.js",
   "main": "main.js",
+  "type": "module",
   "scripts": {
     "start": "node main.js -i titanic.json -h 127.0.0.1 -p 3000",
     "dev": "node --watch main.js -i titanic.json -h 127.0.0.1 -p 3000"
