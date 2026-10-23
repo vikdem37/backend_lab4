@@ -31,7 +31,19 @@ function reply(req, res, status, body) {
   }
   
   function sendJson(req, res, status, payload) {
-    reply(req, res, status, JSON.stringify(payload, null, 2));
+    const body = JSON.stringify(payload, null, 2);
+    if (!output) {
+      reply(req, res, status, body);
+      return;
+    }
+    fs.writeFile(output, body, (err) => {
+      if (err) {
+        const message = { error: `Не вдалося записати відповідь у файл ${output}` };
+        reply(req, res, 500, JSON.stringify(message, null, 2));
+        return;
+      }
+      reply(req, res, status, body);
+    });
   }
   
   function sendError(req, res, status, message) {
