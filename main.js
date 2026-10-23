@@ -58,8 +58,20 @@ function reply(req, res, status, body) {
     return { records };
   }
   
-  function toPassenger(record) {
-    return { name: record.Name ?? null, ticket: record.Ticket ?? null };
+  function toNumber(value) {
+    if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+    if (typeof value === 'string' && value.trim() !== '') {
+      const number = Number(value);
+      return Number.isFinite(number) ? number : null;
+    }
+    return null;
+  }
+  
+  function toPassenger(record, showAge) {
+    const passenger = { name: record.Name ?? null };
+    if (showAge) passenger.age = toNumber(record.Age);
+    passenger.ticket = record.Ticket ?? null;
+    return passenger;
   }
   
   function handleRequest(req, res) {
@@ -76,6 +88,9 @@ function reply(req, res, status, body) {
       return;
     }
   
+    const onlySurvived = url.searchParams.get('survived') === 'true';
+    const showAge = url.searchParams.get('age') === 'true';
+  
     fs.readFile(input, 'utf8', (err, text) => {
       if (err) {
         const message = err.code === 'ENOENT' ? 'Файл даних не знайдено' : 'Не вдалося прочитати файл даних';
@@ -87,7 +102,9 @@ function reply(req, res, status, body) {
         sendError(req, res, 500, `Файл даних пошкоджений: ${parsed.error}`);
         return;
       }
-      const passengers = parsed.records.map((record) => toPassenger(record));
+      const passengers = parsed.records
+        .filter((record) => !onlySurvived || toNumber(record.Survived) === 1)
+        .map((record) => toPassenger(record, showAge));
       sendJson(req, res, 200, passengers);
     });
   }
